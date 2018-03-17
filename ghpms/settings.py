@@ -70,6 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ghpms.wsgi.application'
+TIME_ZONE = 'Asia/Kathmandu'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -105,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 

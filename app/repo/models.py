@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from django.db import models
 from django.core.validators import URLValidator
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from app.user.models import User
 
@@ -31,32 +35,37 @@ class Repo(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
-    def save(self):
-        from git import Repo
-        from github import Github
+    def __str__(self):
+        return str(self.name)
 
-        # using username and password
-        # g = Github("vimm0", "vim9815510732")
 
+@receiver(post_save, sender=Repo, dispatch_uid="update_repo_meta_count")
+def repo_meta(sender, instance, **kwargs):
+    # from git import Repo
+    from github import Github
+
+    # using username and password
+    # g = Github("vimm0", "vim9815510732")
+    if instance.repo_full_name is None:
         # or using an access token
-        g = Github(self.user.git_token)
-        repo_name = g.get_user().get_repo(self.name)
-        self.repo_full_name = repo_name.full_name
-        self.owner_name = repo_name.owner.name
-        self.owner_username = repo_name.owner.login
-        self.language = repo_name.language
-        self.last_modified = repo_name.last_modified
-        self.size = repo_name.size
-        self.clone_url = repo_name.clone_url
-        self.issues_url = repo_name.issues_url
-        self.merges_url = repo_name.merges_url
-        self.milestones_url = repo_name.milestones_url
-        self.comments_url = repo_name.comments_url
-        self.commits_url = repo_name.commits_url
-        import ipdb
-        ipdb.set_trace()
-        # for repo in g.get_user().get_repos():
-        #     print(repo.name)
-        #     repo.edit(has_wiki=False)
+        g = Github(instance.user.git_token)
+        repo_name = g.get_user().get_repo(instance.name)
+        obj = Repo.objects.get(pk=instance.id)
 
-        pass
+        obj.repo_full_name = repo_name.full_name
+        obj.owner_name = repo_name.owner.name
+        obj.owner_username = repo_name.owner.login
+        obj.language = repo_name.language
+        obj.last_modified = datetime.strptime(repo_name.last_modified, '%a, %d %b %Y %H:%M:%S %Z')
+        obj.size = repo_name.size
+        obj.clone_url = repo_name.clone_url
+        obj.issues_url = repo_name.issues_url
+        obj.merges_url = repo_name.merges_url
+        obj.milestones_url = repo_name.milestones_url
+        obj.comments_url = repo_name.comments_url
+        obj.commits_url = repo_name.commits_url
+        obj.save()
+        # import ipdb
+        # ipdb.set_trace()
+        # User Token: c435e9c77b942e0220b313404667b2b1b4fcc8b5
+    # super(Repo, self).save(*args, **kwargs)
