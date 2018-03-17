@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from app.repo.models import Repo
+
+
+class RepoAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Repo, RepoAdmin)
