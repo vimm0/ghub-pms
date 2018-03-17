@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'app.repo'
+    'app.repo',
+    'app.user'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'ghpms.urls'
+AUTH_USER_MODEL = 'user.User'
 
 TEMPLATES = [
     {
