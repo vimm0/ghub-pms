@@ -3,27 +3,36 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon"
+      type="image/png"
+      href="https://cdn1.iconfinder.com/data/icons/logotypes/32/github-128.png">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Ghub-pms</title>
 </head>
 <body>
-<div class="container">
+<div class="container" style="margin-top:2rem;">
     <div class="row">
-        <h1>Github Project Management System</h1>
+        <h1>
+                <img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"
+                     class="figure-img img-fluid rounded"
+                     alt="A generic square placeholder image with rounded corners in a figure." height="60" width="60">
+            Github Project Management System
+        </h1>
         {% block content %}
             <div class="container">
                 <div class="row">
                     {% for item in categorize_repo %}
                         <h5>{{ item.name }}</h5>
                         <div class="container">
-                            <div class="row">
-                                <ul>
-                                    {% for ingr in item.repo_set.all %}
-                                        <li><a href="#">{{ ingr.name }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                            {#                            <div class="row">#}
+                            <ul>
+                                {% for ingr in item.repo_set.all %}
+                                    <li><a href="#">{{ ingr.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            {#                            </div>#}
                         </div>
                     {% endfor %}
                 </div>
