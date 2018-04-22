@@ -126,7 +126,6 @@ Q_CLUSTER = {
     'name': 'ghub-pms',
     'workers': 8,
     'recycle': 500,
-    # 'timeout': 60,
     'compress': True,
     'cpu_affinity': 1,
     'save_limit': 250,
