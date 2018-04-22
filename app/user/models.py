@@ -1,6 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django_q.tasks import async
+
+from app.repo.models import Repo
+
+from app.user.tasks import get_repo
 
 
 def __str__(self):
@@ -49,7 +56,7 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    git_token = models.CharField(_("Key"), max_length=255)
+    git_token = models.CharField(_("Git token"), max_length=255)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -92,3 +99,8 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+
+@receiver(post_save, sender=User, dispatch_uid="update_repo_meta_count")
+def get_repo_meta(sender, instance, **kwargs):
+    async(get_repo, instance)

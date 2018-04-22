@@ -1,4 +1,6 @@
 django
 PyGithub
 gitpython
+django-q
+redis
 ipdb
